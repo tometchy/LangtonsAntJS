@@ -5,91 +5,99 @@
     <canvas id='map'>Map</canvas>
 
     <script>
-        antRectLengthInPixels = 5;
-        numberOfPossibleAntsInRow = 200;
-        var canvasRectLengthInPixels = numberOfPossibleAntsInRow * antRectLengthInPixels;
+        class AntsWorld {
+            constructor(antRectLengthInPixels, numberOfPossibleAntsInRow) {
+                this.antRectLengthInPixels = antRectLengthInPixels;
+                this.numberOfPossibleAntsInRow = numberOfPossibleAntsInRow;
 
-        mapCanvas = document.getElementById("map").getContext('2d');
-        mapCanvas.canvas.width = canvasRectLengthInPixels;
-        mapCanvas.canvas.height = canvasRectLengthInPixels;
+                this.world = Array.apply(null, new Array(numberOfPossibleAntsInRow)).map(Number.prototype.valueOf, 0);
+                for (let i = 0; i < numberOfPossibleAntsInRow; i++) {
+                    this.world[i] = Array.apply(null, new Array(numberOfPossibleAntsInRow)).map(Number.prototype.valueOf, 0);
+                }
 
-        var borderRectLength = 10;
-        mapCanvas.fillRect(0, 0, borderRectLength, borderRectLength);
-        mapCanvas.fillRect(canvasRectLengthInPixels - borderRectLength, canvasRectLengthInPixels - borderRectLength, borderRectLength, borderRectLength);
-        mapCanvas.fillRect(0, canvasRectLengthInPixels - borderRectLength, borderRectLength, borderRectLength);
-        mapCanvas.fillRect(canvasRectLengthInPixels - borderRectLength, 0, borderRectLength, borderRectLength);
+                this.ants = [];
+                this.mapCanvas = document.getElementById("map").getContext('2d');
 
-        world = Array.apply(null, new Array(numberOfPossibleAntsInRow)).map(Number.prototype.valueOf, 0);
-        for (let i = 0; i < numberOfPossibleAntsInRow; i++) {
-            world[i] = Array.apply(null, new Array(numberOfPossibleAntsInRow)).map(Number.prototype.valueOf, 0);
+                var canvasRectLengthInPixels = this.numberOfPossibleAntsInRow * this.antRectLengthInPixels;
+                this.mapCanvas.canvas.width = canvasRectLengthInPixels;
+                this.mapCanvas.canvas.height = canvasRectLengthInPixels;
+
+                var borderRectLength = 10;
+                this.mapCanvas.fillRect(0, 0, borderRectLength, borderRectLength);
+                this.mapCanvas.fillRect(canvasRectLengthInPixels - borderRectLength, canvasRectLengthInPixels - borderRectLength, borderRectLength, borderRectLength);
+                this.mapCanvas.fillRect(0, canvasRectLengthInPixels - borderRectLength, borderRectLength, borderRectLength);
+                this.mapCanvas.fillRect(canvasRectLengthInPixels - borderRectLength, 0, borderRectLength, borderRectLength);
+            }
+
+            moveAnt(i) {
+                var world = this.world;
+                if ((++world[this.ants[i].x][this.ants[i].y]) === 1) {
+                    this.ants[i].direction--;
+                    this.mapCanvas.fillStyle = this.ants[i].color;
+                    this.mapCanvas.fillRect(this.ants[i].x * this.antRectLengthInPixels, this.ants[i].y * this.antRectLengthInPixels, this.antRectLengthInPixels, this.antRectLengthInPixels);
+                } else {
+                    this.ants[i].direction++;
+                    world[this.ants[i].x][this.ants[i].y] = 0;
+                    this.mapCanvas.clearRect(this.ants[i].x * this.antRectLengthInPixels, this.ants[i].y * this.antRectLengthInPixels, this.antRectLengthInPixels, this.antRectLengthInPixels);
+                }
+
+                if (this.ants[i].direction === -1) {
+                    this.ants[i].direction = 3;
+                }
+
+                if (this.ants[i].direction === 4) {
+                    this.ants[i].direction = 0;
+                }
+
+                if (this.ants[i].direction === 0) {
+                    this.ants[i].x++;
+                } else if (this.ants[i].direction === 1) {
+                    this.ants[i].y++;
+                } else if (this.ants[i].direction === 2) {
+                    this.ants[i].x--;
+                } else if (this.ants[i].direction === 3) {
+                    this.ants[i].y--;
+                }
+
+                if (this.ants[i].x === -1) {
+                    this.ants[i].direction = 3;
+                    this.ants[i].x = 0;
+                } else if (this.ants[i].y === -1) {
+                    this.ants[i].direction = 0;
+                    this.ants[i].y = 0;
+                } else if (this.ants[i].x === this.numberOfPossibleAntsInRow) {
+                    this.ants[i].x = this.numberOfPossibleAntsInRow - 1;
+                    this.ants[i].direction = 1;
+                } else if (this.ants[i].y === this.numberOfPossibleAntsInRow) {
+                    this.ants[i].y = this.numberOfPossibleAntsInRow - 1;
+                    this.ants[i].direction = 2;
+                }
+            }
+
+            addAnt(ant) {
+                this.ants.push(ant);
+                var antIndex = this.ants.length - 1;
+            }
+
+            startAnts() {
+                var self = this;
+                setInterval(function () {
+                    for (var i = 0; i < self.ants.length; i++)
+                        self.moveAnt(i);
+                }, 10 /*milliseconds*/); // Note: 10 milliseconds is the smalles possible interval
+            }
         }
 
-        var ants = [];
+        var antsWorld = new AntsWorld(5, 200);
 
-        function moveAnt(i) {
-            if ((++world[ants[i].x][ants[i].y]) === 1) {
-                ants[i].direction--;
-                mapCanvas.fillStyle = ants[i].color;
-                mapCanvas.fillRect(ants[i].x * antRectLengthInPixels, ants[i].y * antRectLengthInPixels, antRectLengthInPixels, antRectLengthInPixels);
-            } else {
-                ants[i].direction++;
-                world[ants[i].x][ants[i].y] = 0;
-                mapCanvas.clearRect(ants[i].x * antRectLengthInPixels, ants[i].y * antRectLengthInPixels, antRectLengthInPixels, antRectLengthInPixels);
-            }
+        antsWorld.addAnt({ x: 50, y: 50, direction: 0, color: "rgb(255, 0, 255)" });
+        antsWorld.addAnt({ x: 150, y: 150, direction: 1, color: "black" });
+        antsWorld.addAnt({ x: 150, y: 50, direction: 2, color: "green" });
+        antsWorld.addAnt({ x: 50, y: 150, direction: 3, color: "blue" });
+        antsWorld.addAnt({ x: 100, y: 100, direction: 0, color: "yellow" })
+        antsWorld.addAnt({ x: 10, y: 10, direction: 0, color: "#FF0000" })
 
-            if (ants[i].direction === -1) {
-                ants[i].direction = 3;
-            }
-
-            if (ants[i].direction === 4) {
-                ants[i].direction = 0;
-            }
-
-            if (ants[i].direction === 0) {
-                ants[i].x++;
-            } else if (ants[i].direction === 1) {
-                ants[i].y++;
-            } else if (ants[i].direction === 2) {
-                ants[i].x--;
-            } else if (ants[i].direction === 3) {
-                ants[i].y--;
-            }
-
-            if (ants[i].x === -1) {
-                ants[i].direction = 3;
-                ants[i].x = 0;
-            } else if (ants[i].y === -1) {
-                ants[i].direction = 0;
-                ants[i].y = 0;
-            } else if (ants[i].x === numberOfPossibleAntsInRow) {
-                ants[i].x = numberOfPossibleAntsInRow - 1;
-                ants[i].direction = 1;
-            } else if (ants[i].y === numberOfPossibleAntsInRow) {
-                ants[i].y = numberOfPossibleAntsInRow - 1;
-                ants[i].direction = 2;
-            }
-        };
-
-        function addAnt(ant) {
-            ants.push(ant);
-            var antIndex = ants.length - 1;
-        }
-
-        function startAnts() {
-            setInterval(function () {
-                for (var i = 0; i < ants.length; i++)
-                    moveAnt(i);
-            }, 10 /*milliseconds*/); // Note: 10 milliseconds is the smalles possible interval
-        }
-
-        addAnt({ x: 50, y: 50, direction: 0, color: "rgb(255, 0, 255)" });
-        addAnt({ x: 150, y: 150, direction: 1, color: "black" });
-        addAnt({ x: 150, y: 50, direction: 2, color: "green" });
-        addAnt({ x: 50, y: 150, direction: 3, color: "blue" });
-        addAnt({ x: 100, y: 100, direction: 0, color: "yellow" })
-        addAnt({ x: 10, y: 10, direction: 0, color: "#FF0000" })
-
-        startAnts();
+        antsWorld.startAnts();
     </script>
 </body>
 
