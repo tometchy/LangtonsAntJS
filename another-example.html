@@ -1,0 +1,20 @@
+<!doctype html>
+
+<body>
+    <canvas id='map'>Map</canvas>
+    <script src="antsworld.js"></script>
+
+    <script>
+        var antsWorld = new AntsWorld(5, 400);
+
+        antsWorld.addAnt({ x: 100, y: 100, direction: 0, color: "pink" });
+        antsWorld.addAnt({ x: 300, y: 100, direction: 0, color: "yellow" });
+        antsWorld.addAnt({ x: 200, y: 200, direction: 0, color: "green" });
+        antsWorld.addAnt({ x: 300, y: 350, direction: 0, color: "black" });
+        antsWorld.addAnt({ x: 380, y: 350, direction: 0, color: "red" });
+
+        antsWorld.startAnts(32000, 10);
+    </script>
+</body>
+
+</html>
