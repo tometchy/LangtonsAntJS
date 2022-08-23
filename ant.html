@@ -1,78 +1,87 @@
 <!doctype html>
+
 <body>
-<canvas id='map'>Map</canvas>
-<script>
-    map = document.getElementById("map");
-    mapCanvas     = map.getContext('2d');
-    mapCanvas.canvas.height = "1000";
-    mapCanvas.canvas.width = "1000";
-    D       = 200;
-    d       = 5;
 
-    array = Array.apply(null, new Array(D)).map(Number.prototype.valueOf, 0);
-    for (let i = 0; i < D; i++) {
-        array[i] = Array.apply(null, new Array(D)).map(Number.prototype.valueOf, 0);
-    }
+    <canvas id='map'>Map</canvas>
 
-    direction = [0, 1, 2, 3, 0];
-    x         = [D / 4, D * 3 / 4, D * 3 / 4, D / 4, D / 2];
-    y         = [D / 4, D * 3 / 4, D / 4, D * 3 / 4, D / 2];
-    colours   = ["#FF00FF", "#0000FF", "#00FF00", "#00FFFF", "#FFFF00"];
+    <script>
+        function prepareCanvas(canvasRectLengthInPixels) {
+            mapCanvas = document.getElementById("map").getContext('2d');
+            mapCanvas.canvas.width = canvasRectLengthInPixels;
+            mapCanvas.canvas.height = canvasRectLengthInPixels;
 
-    function ant(index) {
-        if ((++array[x[index]][y[index]]) === 1) {
-            direction[index]--;
-            mapCanvas.fillStyle = colours[index];
-            mapCanvas.fillRect(x[index] * d, y[index] * d, d, d);
-        } else {
-            direction[index]++;
-            array[x[index]][y[index]] = 0;
-            mapCanvas.clearRect(x[index] * d, y[index] * d, d, d);
+            var borderRectLenth = 10;
+            mapCanvas.fillRect(0, 0, borderRectLenth, borderRectLenth);
+            mapCanvas.fillRect(canvasRectLengthInPixels - borderRectLenth, canvasRectLengthInPixels - borderRectLenth, borderRectLenth, borderRectLenth);
+            mapCanvas.fillRect(0, canvasRectLengthInPixels - borderRectLenth, borderRectLenth, borderRectLenth);
+            mapCanvas.fillRect(canvasRectLengthInPixels - borderRectLenth, 0, borderRectLenth, borderRectLenth);
         }
 
-        if (direction[index] === -1) {
-            direction[index] = 3;
+        prepareCanvas(1000);
+
+        D = 200;
+        d = 5;
+
+        array = Array.apply(null, new Array(D)).map(Number.prototype.valueOf, 0);
+        for (let i = 0; i < D; i++) {
+            array[i] = Array.apply(null, new Array(D)).map(Number.prototype.valueOf, 0);
         }
 
-        if (direction[index] === 4) {
-            direction[index] = 0;
-        }
+        direction = [0, 1, 2, 3, 0];
+        x = [D / 4, D * 3 / 4, D * 3 / 4, D / 4, D / 2];
+        y = [D / 4, D * 3 / 4, D / 4, D * 3 / 4, D / 2];
+        colours = ["#FF00FF", "#0000FF", "#00FF00", "#00FFFF", "#FFFF00"];
 
-        if (direction[index] === 0) {
-            x[index]++;
-        } else if (direction[index] === 1) {
-            y[index]++;
-        } else if (direction[index] === 2) {
-            x[index]--;
-        } else if (direction[index] === 3) {
-            y[index]--;
-        }
+        function ant(index) {
+            if ((++array[x[index]][y[index]]) === 1) {
+                direction[index]--;
+                mapCanvas.fillStyle = colours[index];
+                mapCanvas.fillRect(x[index] * d, y[index] * d, d, d);
+            } else {
+                direction[index]++;
+                array[x[index]][y[index]] = 0;
+                mapCanvas.clearRect(x[index] * d, y[index] * d, d, d);
+            }
 
-        if (x[index] === -1) {
-            direction[index] = 3;
-            x[index] = 0;
-        } else if (y[index] === -1) {
-            direction[index] = 0;
-            y[index] = 0;
-        } else if (x[index] === D) {
-            x[index] = D - 1;
-            direction[index] = 1;
-        } else if (y[index] === D) {
-            y[index] = D - 1;
-            direction[index] = 2;
-        }
-    };
+            if (direction[index] === -1) {
+                direction[index] = 3;
+            }
 
-    setInterval(function(){ant(0)}, 0);
-    setInterval(function(){ant(1)}, 0);
-    setInterval(function(){ant(2)}, 0);
-    setInterval(function(){ant(3)}, 0);
-    setInterval(function(){ant(4)}, 0);
+            if (direction[index] === 4) {
+                direction[index] = 0;
+            }
 
-    mapCanvas.fillRect(0, 0, 10, 10);
-    mapCanvas.fillRect(990, 990, 10, 10);
-    mapCanvas.fillRect(0, 990, 10, 10);
-    mapCanvas.fillRect(990, 0, 10, 10);
-</script>
+            if (direction[index] === 0) {
+                x[index]++;
+            } else if (direction[index] === 1) {
+                y[index]++;
+            } else if (direction[index] === 2) {
+                x[index]--;
+            } else if (direction[index] === 3) {
+                y[index]--;
+            }
+
+            if (x[index] === -1) {
+                direction[index] = 3;
+                x[index] = 0;
+            } else if (y[index] === -1) {
+                direction[index] = 0;
+                y[index] = 0;
+            } else if (x[index] === D) {
+                x[index] = D - 1;
+                direction[index] = 1;
+            } else if (y[index] === D) {
+                y[index] = D - 1;
+                direction[index] = 2;
+            }
+        };
+
+        setInterval(function () { ant(0) }, 10 /*milliseconds*/); // Note: 10 milliseconds is the smalles possible interval
+        setInterval(function () { ant(1) }, 10 /*milliseconds*/); // Note: 10 milliseconds is the smalles possible interval
+        setInterval(function () { ant(2) }, 10 /*milliseconds*/); // Note: 10 milliseconds is the smalles possible interval
+        setInterval(function () { ant(3) }, 10 /*milliseconds*/); // Note: 10 milliseconds is the smalles possible interval
+        setInterval(function () { ant(4) }, 10 /*milliseconds*/); // Note: 10 milliseconds is the smalles possible interval
+    </script>
 </body>
+
 </html>
