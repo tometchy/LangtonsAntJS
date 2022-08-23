@@ -5,23 +5,19 @@
     <canvas id='map'>Map</canvas>
 
     <script>
-        function prepareCanvas(canvasRectLengthInPixels) {
-            mapCanvas = document.getElementById("map").getContext('2d');
-            mapCanvas.canvas.width = canvasRectLengthInPixels;
-            mapCanvas.canvas.height = canvasRectLengthInPixels;
-
-            var borderRectLenth = 10;
-            mapCanvas.fillRect(0, 0, borderRectLenth, borderRectLenth);
-            mapCanvas.fillRect(canvasRectLengthInPixels - borderRectLenth, canvasRectLengthInPixels - borderRectLenth, borderRectLenth, borderRectLenth);
-            mapCanvas.fillRect(0, canvasRectLengthInPixels - borderRectLenth, borderRectLenth, borderRectLenth);
-            mapCanvas.fillRect(canvasRectLengthInPixels - borderRectLenth, 0, borderRectLenth, borderRectLenth);
-        }
-
-
         antRectLengthInPixels = 5;
         numberOfPossibleAntsInRow = 200;
+        var canvasRectLengthInPixels = numberOfPossibleAntsInRow * antRectLengthInPixels;
 
-        prepareCanvas(numberOfPossibleAntsInRow * antRectLengthInPixels);
+        mapCanvas = document.getElementById("map").getContext('2d');
+        mapCanvas.canvas.width = canvasRectLengthInPixels;
+        mapCanvas.canvas.height = canvasRectLengthInPixels;
+
+        var borderRectLenth = 10;
+        mapCanvas.fillRect(0, 0, borderRectLenth, borderRectLenth);
+        mapCanvas.fillRect(canvasRectLengthInPixels - borderRectLenth, canvasRectLengthInPixels - borderRectLenth, borderRectLenth, borderRectLenth);
+        mapCanvas.fillRect(0, canvasRectLengthInPixels - borderRectLenth, borderRectLenth, borderRectLenth);
+        mapCanvas.fillRect(canvasRectLengthInPixels - borderRectLenth, 0, borderRectLenth, borderRectLenth);
 
         world = Array.apply(null, new Array(numberOfPossibleAntsInRow)).map(Number.prototype.valueOf, 0);
         for (let i = 0; i < numberOfPossibleAntsInRow; i++) {
