@@ -22,21 +22,21 @@
         D = 200;
         d = 5;
 
-        array = Array.apply(null, new Array(D)).map(Number.prototype.valueOf, 0);
+        world = Array.apply(null, new Array(D)).map(Number.prototype.valueOf, 0);
         for (let i = 0; i < D; i++) {
-            array[i] = Array.apply(null, new Array(D)).map(Number.prototype.valueOf, 0);
+            world[i] = Array.apply(null, new Array(D)).map(Number.prototype.valueOf, 0);
         }
 
         var ants = [];
 
         function moveAnt(i) {
-            if ((++array[ants[i].x][ants[i].y]) === 1) {
+            if ((++world[ants[i].x][ants[i].y]) === 1) {
                 ants[i].direction--;
                 mapCanvas.fillStyle = ants[i].color;
                 mapCanvas.fillRect(ants[i].x * d, ants[i].y * d, d, d);
             } else {
                 ants[i].direction++;
-                array[ants[i].x][ants[i].y] = 0;
+                world[ants[i].x][ants[i].y] = 0;
                 mapCanvas.clearRect(ants[i].x * d, ants[i].y * d, d, d);
             }
 
@@ -75,48 +75,15 @@
 
         function addAnt(ant) {
             ants.push(ant);
-            var antIndex = ants.length -1;
+            var antIndex = ants.length - 1;
             setInterval(function () { moveAnt(antIndex) }, 10 /*milliseconds*/); // Note: 10 milliseconds is the smalles possible interval
         }
 
-        addAnt(
-            {
-                x: 50,
-                y: 50,
-                direction: 0,
-                color: "#FF00FF"
-            });
-            
-        addAnt(
-            {
-                x: 150,
-                y: 150,
-                direction: 1,
-                color: "#0000FF"
-            });
-
-        addAnt(
-            {
-                x: 150,
-                y: 50,
-                direction: 2,
-                color: "#00FF00"
-            });
-
-        addAnt(
-            {
-                x: 50,
-                y: 150,
-                direction: 3,
-                color: "#00FFFF"
-            });
-
-        addAnt({
-                x: 100,
-                y: 100,
-                direction: 0,
-                color: "#FFFF00"
-            })
+        addAnt({ x: 50, y: 50, direction: 0, color: "#FF00FF" });
+        addAnt({ x: 150, y: 150, direction: 1, color: "#0000FF" });
+        addAnt({ x: 150, y: 50, direction: 2, color: "#00FF00" });
+        addAnt({ x: 50, y: 150, direction: 3, color: "#00FFFF" });
+        addAnt({ x: 100, y: 100, direction: 0, color: "#FFFF00" })
     </script>
 </body>
 
