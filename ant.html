@@ -79,8 +79,14 @@
                 var antIndex = this.ants.length - 1;
             }
 
-            startAnts() {
+            startAnts(numberOfPreMadeMoves) {
                 var self = this;
+
+                for(var i=0; i<numberOfPreMadeMoves; i++) {
+                    for (var j = 0; j < self.ants.length; j++)
+                        self.moveAnt(j);
+                }
+
                 setInterval(function () {
                     for (var i = 0; i < self.ants.length; i++)
                         self.moveAnt(i);
@@ -97,7 +103,7 @@
         antsWorld.addAnt({ x: 100, y: 100, direction: 0, color: "yellow" })
         antsWorld.addAnt({ x: 10, y: 10, direction: 0, color: "#FF0000" })
 
-        antsWorld.startAnts();
+        antsWorld.startAnts(2000);
     </script>
 </body>
 
