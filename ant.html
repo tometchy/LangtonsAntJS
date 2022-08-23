@@ -27,88 +27,96 @@
             array[i] = Array.apply(null, new Array(D)).map(Number.prototype.valueOf, 0);
         }
 
-        var ants = [
+        var ants = [];
+
+        function moveAnt(i) {
+            if ((++array[ants[i].x][ants[i].y]) === 1) {
+                ants[i].direction--;
+                mapCanvas.fillStyle = ants[i].color;
+                mapCanvas.fillRect(ants[i].x * d, ants[i].y * d, d, d);
+            } else {
+                ants[i].direction++;
+                array[ants[i].x][ants[i].y] = 0;
+                mapCanvas.clearRect(ants[i].x * d, ants[i].y * d, d, d);
+            }
+
+            if (ants[i].direction === -1) {
+                ants[i].direction = 3;
+            }
+
+            if (ants[i].direction === 4) {
+                ants[i].direction = 0;
+            }
+
+            if (ants[i].direction === 0) {
+                ants[i].x++;
+            } else if (ants[i].direction === 1) {
+                ants[i].y++;
+            } else if (ants[i].direction === 2) {
+                ants[i].x--;
+            } else if (ants[i].direction === 3) {
+                ants[i].y--;
+            }
+
+            if (ants[i].x === -1) {
+                ants[i].direction = 3;
+                ants[i].x = 0;
+            } else if (ants[i].y === -1) {
+                ants[i].direction = 0;
+                ants[i].y = 0;
+            } else if (ants[i].x === D) {
+                ants[i].x = D - 1;
+                ants[i].direction = 1;
+            } else if (ants[i].y === D) {
+                ants[i].y = D - 1;
+                ants[i].direction = 2;
+            }
+        };
+
+        function addAnt(ant) {
+            ants.push(ant);
+            var antIndex = ants.length -1;
+            setInterval(function () { moveAnt(antIndex) }, 10 /*milliseconds*/); // Note: 10 milliseconds is the smalles possible interval
+        }
+
+        addAnt(
             {
                 x: 50,
                 y: 50,
                 direction: 0,
                 color: "#FF00FF"
-            },
+            });
+            
+        addAnt(
             {
                 x: 150,
                 y: 150,
                 direction: 1,
                 color: "#0000FF"
-            },
+            });
+
+        addAnt(
             {
                 x: 150,
                 y: 50,
                 direction: 2,
                 color: "#00FF00"
-            },
+            });
+
+        addAnt(
             {
                 x: 50,
                 y: 150,
                 direction: 3,
                 color: "#00FFFF"
-            },
-            {
+            });
+
+        addAnt({
                 x: 100,
                 y: 100,
                 direction: 0,
                 color: "#FFFF00"
-            }
-        ];
-
-        function moveAnt(index) {
-            if ((++array[ants[index].x][ants[index].y]) === 1) {
-                ants[index].direction--;
-                mapCanvas.fillStyle = ants[index].color;
-                mapCanvas.fillRect(ants[index].x * d, ants[index].y * d, d, d);
-            } else {
-                ants[index].direction++;
-                array[ants[index].x][ants[index].y] = 0;
-                mapCanvas.clearRect(ants[index].x * d, ants[index].y * d, d, d);
-            }
-
-            if (ants[index].direction === -1) {
-                ants[index].direction = 3;
-            }
-
-            if (ants[index].direction === 4) {
-                ants[index].direction = 0;
-            }
-
-            if (ants[index].direction === 0) {
-                ants[index].x++;
-            } else if (ants[index].direction === 1) {
-                ants[index].y++;
-            } else if (ants[index].direction === 2) {
-                ants[index].x--;
-            } else if (ants[index].direction === 3) {
-                ants[index].y--;
-            }
-
-            if (ants[index].x === -1) {
-                ants[index].direction = 3;
-                ants[index].x = 0;
-            } else if (ants[index].y === -1) {
-                ants[index].direction = 0;
-                ants[index].y = 0;
-            } else if (ants[index].x === D) {
-                ants[index].x = D - 1;
-                ants[index].direction = 1;
-            } else if (ants[index].y === D) {
-                ants[index].y = D - 1;
-                ants[index].direction = 2;
-            }
-        };
-
-        setInterval(function () { moveAnt(0) }, 10 /*milliseconds*/); // Note: 10 milliseconds is the smalles possible interval
-        setInterval(function () { moveAnt(1) }, 10 /*milliseconds*/); // Note: 10 milliseconds is the smalles possible interval
-        setInterval(function () { moveAnt(2) }, 10 /*milliseconds*/); // Note: 10 milliseconds is the smalles possible interval
-        setInterval(function () { moveAnt(3) }, 10 /*milliseconds*/); // Note: 10 milliseconds is the smalles possible interval
-        setInterval(function () { moveAnt(4) }, 10 /*milliseconds*/); // Note: 10 milliseconds is the smalles possible interval
+            })
     </script>
 </body>
 
