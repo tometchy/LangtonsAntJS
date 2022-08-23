@@ -1,14 +1,11 @@
 <!doctype html>
-<html lang="en">
-<head>
-    <title>LangtonsAntJS</title>
-    <meta charset='utf-8'/>
-</head>
 <body>
-<canvas height='1000' width='1000' id='example'>Обновите браузер</canvas>
+<canvas id='map'>Map</canvas>
 <script>
-    example = document.getElementById("example");
-    ctx     = example.getContext('2d');
+    map = document.getElementById("map");
+    mapCanvas     = map.getContext('2d');
+    mapCanvas.canvas.height = "1000";
+    mapCanvas.canvas.width = "1000";
     D       = 200;
     d       = 5;
 
@@ -25,12 +22,12 @@
     function ant(index) {
         if ((++array[x[index]][y[index]]) === 1) {
             direction[index]--;
-            ctx.fillStyle = colours[index];
-            ctx.fillRect(x[index] * d, y[index] * d, d, d);
+            mapCanvas.fillStyle = colours[index];
+            mapCanvas.fillRect(x[index] * d, y[index] * d, d, d);
         } else {
             direction[index]++;
             array[x[index]][y[index]] = 0;
-            ctx.clearRect(x[index] * d, y[index] * d, d, d);
+            mapCanvas.clearRect(x[index] * d, y[index] * d, d, d);
         }
 
         if (direction[index] === -1) {
@@ -72,10 +69,10 @@
     setInterval(function(){ant(3)}, 0);
     setInterval(function(){ant(4)}, 0);
 
-    ctx.fillRect(0, 0, 10, 10);
-    ctx.fillRect(990, 990, 10, 10);
-    ctx.fillRect(0, 990, 10, 10);
-    ctx.fillRect(990, 0, 10, 10);
+    mapCanvas.fillRect(0, 0, 10, 10);
+    mapCanvas.fillRect(990, 990, 10, 10);
+    mapCanvas.fillRect(0, 990, 10, 10);
+    mapCanvas.fillRect(990, 0, 10, 10);
 </script>
 </body>
 </html>
