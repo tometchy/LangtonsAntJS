@@ -73,7 +73,13 @@
         function addAnt(ant) {
             ants.push(ant);
             var antIndex = ants.length - 1;
-            setInterval(function () { moveAnt(antIndex) }, 10 /*milliseconds*/); // Note: 10 milliseconds is the smalles possible interval
+        }
+
+        function startAnts() {
+            setInterval(function () {
+                for (var i = 0; i < ants.length; i++)
+                    moveAnt(i)
+            }, 10 /*milliseconds*/); // Note: 10 milliseconds is the smalles possible interval
         }
 
         addAnt({ x: 50, y: 50, direction: 0, color: "#FF00FF" });
@@ -81,6 +87,8 @@
         addAnt({ x: 150, y: 50, direction: 2, color: "#00FF00" });
         addAnt({ x: 50, y: 150, direction: 3, color: "#00FFFF" });
         addAnt({ x: 100, y: 100, direction: 0, color: "#FFFF00" })
+
+        startAnts();
     </script>
 </body>
 
