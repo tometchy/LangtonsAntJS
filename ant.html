@@ -17,14 +17,15 @@
             mapCanvas.fillRect(canvasRectLengthInPixels - borderRectLenth, 0, borderRectLenth, borderRectLenth);
         }
 
-        prepareCanvas(1000);
 
-        D = 200;
-        d = 5;
+        antRectLengthInPixels = 5;
+        numberOfPossibleAntsInRow = 200;
 
-        world = Array.apply(null, new Array(D)).map(Number.prototype.valueOf, 0);
-        for (let i = 0; i < D; i++) {
-            world[i] = Array.apply(null, new Array(D)).map(Number.prototype.valueOf, 0);
+        prepareCanvas(numberOfPossibleAntsInRow * antRectLengthInPixels);
+
+        world = Array.apply(null, new Array(numberOfPossibleAntsInRow)).map(Number.prototype.valueOf, 0);
+        for (let i = 0; i < numberOfPossibleAntsInRow; i++) {
+            world[i] = Array.apply(null, new Array(numberOfPossibleAntsInRow)).map(Number.prototype.valueOf, 0);
         }
 
         var ants = [];
@@ -33,11 +34,11 @@
             if ((++world[ants[i].x][ants[i].y]) === 1) {
                 ants[i].direction--;
                 mapCanvas.fillStyle = ants[i].color;
-                mapCanvas.fillRect(ants[i].x * d, ants[i].y * d, d, d);
+                mapCanvas.fillRect(ants[i].x * antRectLengthInPixels, ants[i].y * antRectLengthInPixels, antRectLengthInPixels, antRectLengthInPixels);
             } else {
                 ants[i].direction++;
                 world[ants[i].x][ants[i].y] = 0;
-                mapCanvas.clearRect(ants[i].x * d, ants[i].y * d, d, d);
+                mapCanvas.clearRect(ants[i].x * antRectLengthInPixels, ants[i].y * antRectLengthInPixels, antRectLengthInPixels, antRectLengthInPixels);
             }
 
             if (ants[i].direction === -1) {
@@ -64,11 +65,11 @@
             } else if (ants[i].y === -1) {
                 ants[i].direction = 0;
                 ants[i].y = 0;
-            } else if (ants[i].x === D) {
-                ants[i].x = D - 1;
+            } else if (ants[i].x === numberOfPossibleAntsInRow) {
+                ants[i].x = numberOfPossibleAntsInRow - 1;
                 ants[i].direction = 1;
-            } else if (ants[i].y === D) {
-                ants[i].y = D - 1;
+            } else if (ants[i].y === numberOfPossibleAntsInRow) {
+                ants[i].y = numberOfPossibleAntsInRow - 1;
                 ants[i].direction = 2;
             }
         };
