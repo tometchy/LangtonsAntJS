@@ -10,7 +10,7 @@
         var numberOfAnts = 100;
 
         for(var i=0; i<numberOfAnts; i++)
-            antsWorld.addAnt({ x: i, y: i, direction: 0, color: "black" });
+            antsWorld.addAnt({ x: i, y: i, direction: 0, color: ('#' + ('00000' + (i*2).toString(16)).slice(-6)) });
 
         antsWorld.startAnts(0, 10);
     </script>
