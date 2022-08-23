@@ -69,7 +69,6 @@ class AntsWorld {
 
     addAnt(ant) {
         this.ants.push(ant);
-        var antIndex = this.ants.length - 1;
     }
 
     startAnts(numberOfPreMadeMoves, millisecondsDelay) {
@@ -83,6 +82,6 @@ class AntsWorld {
         setInterval(function () {
             for (var i = 0; i < self.ants.length; i++)
                 self.moveAnt(i);
-        }, millisecondsDelay); // Note: 10 milliseconds is the smalles possible interval
+        }, millisecondsDelay); // Note: 10 milliseconds is the smallest possible interval
     }
 }
