@@ -1,0 +1,23 @@
+<!doctype html>
+
+<body>
+    <canvas id='map'>Map</canvas>
+    <script src="antsworld.js"></script>
+
+    <script>
+        var antsWorld = new AntsWorld(5, 200);
+
+        var numberOfAnts = 100;
+
+        var x = 10;
+        var y = 10;
+
+        for (var i = 0; i < numberOfAnts; i++) {
+            antsWorld.addAnt({ x: i, y: i, direction: 1, color: "black" });
+        }
+
+        antsWorld.startAnts(0, 10);
+    </script>
+</body>
+
+</html>
