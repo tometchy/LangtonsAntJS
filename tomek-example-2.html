@@ -1,8 +1,8 @@
 <!doctype html>
 
 <body>
-    <canvas id='map'>Map</canvas>
     <script src="antsworld.js"></script>
+    <canvas id='map'>Map</canvas>
 
     <script>
         var antsWorld = new AntsWorld(5, 200);
@@ -14,8 +14,7 @@
         antsWorld.addAnt({ x: 100, y: 100, direction: 0, color: "yellow" })
         antsWorld.addAnt({ x: 10, y: 10, direction: 0, color: "#FF0000" })
 
-        antsWorld.jumpMoves(2000);
-        antsWorld.startAnts(10);
+        antsWorld.onAntsReady();
     </script>
 </body>
 

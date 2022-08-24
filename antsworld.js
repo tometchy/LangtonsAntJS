@@ -9,29 +9,35 @@ class AntsWorld {
         }
 
         this.ants = [];
-        this.mapCanvas = document.getElementById("map").getContext('2d');
+        var mapCanvas = document.getElementById("map");
+        mapCanvas.insertAdjacentHTML('beforebegin', '<div style="font-size: 200%"> <label for="phase">Phase:</label> <input type="number" id="phase" value="0" readonly> <label for="interval">Interval (millis):</label> <input type="number" id="interval" required min="10" value="10"> <button id="playOrPause">&#9654;/&#9208;</button> <button id="oneStep">One step</button> </div>');
+        this.mapCanvasContext = mapCanvas.getContext('2d');
 
         var canvasRectLengthInPixels = this.numberOfPossibleAntsInRow * this.antRectLengthInPixels;
-        this.mapCanvas.canvas.width = canvasRectLengthInPixels;
-        this.mapCanvas.canvas.height = canvasRectLengthInPixels;
+        this.mapCanvasContext.canvas.width = canvasRectLengthInPixels;
+        this.mapCanvasContext.canvas.height = canvasRectLengthInPixels;
 
         var borderRectLength = 10;
-        this.mapCanvas.fillRect(0, 0, borderRectLength, borderRectLength);
-        this.mapCanvas.fillRect(canvasRectLengthInPixels - borderRectLength, canvasRectLengthInPixels - borderRectLength, borderRectLength, borderRectLength);
-        this.mapCanvas.fillRect(0, canvasRectLengthInPixels - borderRectLength, borderRectLength, borderRectLength);
-        this.mapCanvas.fillRect(canvasRectLengthInPixels - borderRectLength, 0, borderRectLength, borderRectLength);
+        this.mapCanvasContext.fillRect(0, 0, borderRectLength, borderRectLength);
+        this.mapCanvasContext.fillRect(canvasRectLengthInPixels - borderRectLength, canvasRectLengthInPixels - borderRectLength, borderRectLength, borderRectLength);
+        this.mapCanvasContext.fillRect(0, canvasRectLengthInPixels - borderRectLength, borderRectLength, borderRectLength);
+        this.mapCanvasContext.fillRect(canvasRectLengthInPixels - borderRectLength, 0, borderRectLength, borderRectLength);
+
+        var self = this;
+        document.getElementById("oneStep").onclick = function () { self.makeOneStep(); };
+        document.getElementById("playOrPause").onclick = function () { self.startOrStop(); };
     }
 
     #moveAnt(i) {
         var world = this.world;
         if ((++world[this.ants[i].x][this.ants[i].y]) === 1) {
             this.ants[i].direction--;
-            this.mapCanvas.fillStyle = this.ants[i].color;
-            this.mapCanvas.fillRect(this.ants[i].x * this.antRectLengthInPixels, this.ants[i].y * this.antRectLengthInPixels, this.antRectLengthInPixels, this.antRectLengthInPixels);
+            this.mapCanvasContext.fillStyle = this.ants[i].color;
+            this.mapCanvasContext.fillRect(this.ants[i].x * this.antRectLengthInPixels, this.ants[i].y * this.antRectLengthInPixels, this.antRectLengthInPixels, this.antRectLengthInPixels);
         } else {
             this.ants[i].direction++;
             world[this.ants[i].x][this.ants[i].y] = 0;
-            this.mapCanvas.clearRect(this.ants[i].x * this.antRectLengthInPixels, this.ants[i].y * this.antRectLengthInPixels, this.antRectLengthInPixels, this.antRectLengthInPixels);
+            this.mapCanvasContext.clearRect(this.ants[i].x * this.antRectLengthInPixels, this.ants[i].y * this.antRectLengthInPixels, this.antRectLengthInPixels, this.antRectLengthInPixels);
         }
 
         if (this.ants[i].direction === -1) {
@@ -67,22 +73,50 @@ class AntsWorld {
         }
     }
 
-    moveAllAnts() {
-        for (var i = 0; i < this.ants.length; i++)
-            this.#moveAnt(i);
-    }
-
     addAnt(ant) {
         this.ants.push(ant);
     }
 
-    startAnts(numberOfPreMadeMoves, millisecondsDelay) {
+    onAntsReady() {
+        this.makeOneStep();
+    }
+
+    makeOneStep() {
+        for (var i = 0; i < this.ants.length; i++)
+            this.#moveAnt(i);
+        document.getElementById('phase').stepUp();
+    }
+
+    jumpMoves(numberOfMovesToJump) {
+        for (var i = 0; i < numberOfMovesToJump; i++)
+            this.makeOneStep();
+    }
+
+    startAnts(millisecondsDelay = null) {
+        if (millisecondsDelay == null)
+            millisecondsDelay = document.getElementById('interval').value;
+        else
+            document.getElementById('interval').value = millisecondsDelay;
+
         var self = this;
 
-        for (var i = 0; i < numberOfPreMadeMoves; i++)
-            self.moveAllAnts();
-
-        setInterval(function () { self.moveAllAnts();
+        this.intervalId = setInterval(function () {
+            self.makeOneStep();
         }, millisecondsDelay); // Note: 10 milliseconds is the smallest possible interval
+
+        document.getElementById('interval').readOnly = true;
+    }
+
+    startOrStop() {
+        if (this.intervalId == null)
+            this.startAnts();
+        else
+            this.stopAnts();
+    }
+
+    stopAnts() {
+        clearInterval(this.intervalId);
+        document.getElementById('interval').readOnly = false;
+        this.intervalId = null;
     }
 }
