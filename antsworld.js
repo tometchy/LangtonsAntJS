@@ -22,7 +22,7 @@ class AntsWorld {
         this.mapCanvas.fillRect(canvasRectLengthInPixels - borderRectLength, 0, borderRectLength, borderRectLength);
     }
 
-    moveAnt(i) {
+    #moveAnt(i) {
         var world = this.world;
         if ((++world[this.ants[i].x][this.ants[i].y]) === 1) {
             this.ants[i].direction--;
@@ -67,6 +67,11 @@ class AntsWorld {
         }
     }
 
+    moveAllAnts() {
+        for (var i = 0; i < this.ants.length; i++)
+            this.#moveAnt(i);
+    }
+
     addAnt(ant) {
         this.ants.push(ant);
     }
@@ -74,14 +79,10 @@ class AntsWorld {
     startAnts(numberOfPreMadeMoves, millisecondsDelay) {
         var self = this;
 
-        for (var i = 0; i < numberOfPreMadeMoves; i++) {
-            for (var j = 0; j < self.ants.length; j++)
-                self.moveAnt(j);
-        }
+        for (var i = 0; i < numberOfPreMadeMoves; i++)
+            self.moveAllAnts();
 
-        setInterval(function () {
-            for (var i = 0; i < self.ants.length; i++)
-                self.moveAnt(i);
+        setInterval(function () { self.moveAllAnts();
         }, millisecondsDelay); // Note: 10 milliseconds is the smallest possible interval
     }
 }
